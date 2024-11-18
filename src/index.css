@@ -1,0 +1,11 @@
+@tailwind components;
+@tailwind utilities;
+@tailwind base; 
+
+.textBlock{
+ @apply absolute outline-none py-1 px-3 bg-transparent focus:border-2 w-auto h-auto ;
+
+}
+.textBlock:focus{
+  @apply outline-1 outline-gray-300
+}
