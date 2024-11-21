@@ -2,27 +2,15 @@ import React, { useEffect, useRef, useState } from "react";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import TextBlock from "./components/TextBlock";
+import { useNodes } from "./contexts/useNodes";
+import useUndoRedo from "./hooks/undoRedo";
 
 function App() {
-  const [nodes, setNodes] = useState([]);
-  const [reDos, setRedos] = useState([]);
 
-  const handleUndo = (e) => {
-    if (!nodes.length) return;
-    let allNodes = [...nodes];
-    let lastNode = allNodes.pop();
-    setRedos((redos) => [...redos, lastNode]);
-    setNodes([...allNodes]);
-  };
+  const {nodes, setNodes, setRedos, lastNode, setLastNode} = useNodes();
 
-  const handleRedo = (e) => {
-    if (!reDos.length) return;
-    let allNodes = [...reDos];
-    let lastNode = allNodes.pop();
-    setNodes((prev) => [...prev, lastNode]);
-    setRedos([...allNodes]);
-
-  };
+  const { handleUndo, handleRedo, handleClear} = useUndoRedo();
+  const containerRef = useRef();
 
   const handleAddText = (
     fontFamily,
@@ -32,17 +20,16 @@ function App() {
     textAlign,
     isUnderline
   ) => {
-    // console.log(fontSize, isBold, isItalic, textAlign, isUnderline);
     const containerRect = containerRef.current.getBoundingClientRect();
     let left = Math.max(10, Math.random() * containerRect.width - 200);
     let top = Math.max(10, Math.random() * containerRect.height - 200);
-
-    const decorationTypes = [
-      "center",
-      "justify",
-      "left",
-      "right",
-    ];
+    console.log(fontFamily,
+      fontSize,
+      isBold,
+      isItalic,
+      textAlign,
+      isUnderline);
+    
     const newBlock = {
       id: Date.now(),
       content: "Edit Text",
@@ -51,52 +38,45 @@ function App() {
       fontSize,
       isBold,
       isItalic,
-      textAlign: decorationTypes[textAlign],
+      textAlign,
       isUnderline,
       fontFamily,
     };
+    console.log(newBlock);
+    
     setNodes((prev) => [...prev, newBlock]);
     setRedos([]);
 
-    console.log(nodes)
   };
-  const containerRef = useRef();
 
-  const handleChangeProps = (
+  const handleChangeProps = (fontFamily,
     fontSize,
     isBold,
     isItalic,
-    textDecoration,
-    isUnderline
-  ) => {
-    console.log(fontSize, isBold, isItalic, textDecoration, isUnderline);
+    textAlign,
+    isUnderline) => {
+      
+    if(nodes.length && Object.keys(lastNode).length){
+      
+      let allNodes = nodes.map(node => node.id === lastNode.id ? {...node, fontFamily, fontSize, isBold, isItalic, textAlign, isUnderline} : node);
+      setNodes(allNodes)
+      
+    }
+    
+    
   };
 
   const handleOnchange = (textContent, id, input) => {
-
     // console.log(nodes);
-    
-    setNodes(prev => prev.map(node => node.id === id ? {...node, content : textContent}: node))
+      let targetNode = nodes.filter(node => node.id === id)
 
-
+      setLastNode(targetNode.length?targetNode[0]: lastNode)
+      setNodes(prev => prev.map(node => node.id === id ? {...node, content : textContent}: node))
   }
-  const handleClear = () => {
-    setNodes([])
-    localStorage.setItem('texts', '')
-  }
-  useEffect(()=> {
-    let items = localStorage.getItem('texts')
-    if(items){
-      setNodes(JSON.parse(items))
-    }
-  }, [])
+  
+  
 
-  useEffect(() => {
-    if(nodes.length)
-      localStorage.setItem("texts", JSON.stringify(nodes));
-    console.log('nodes updating');
-    console.log(nodes);
- }, [nodes]);
+  
  
   return (
     <>

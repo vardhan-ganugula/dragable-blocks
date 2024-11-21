@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { CiText } from "react-icons/ci";
 import { TfiPlus, TfiMinus } from "react-icons/tfi";
 import { FaItalic, FaBold, FaUnderline } from "react-icons/fa";
@@ -10,23 +10,42 @@ import {
   CiTextAlignLeft,
   CiTextAlignRight,
 } from "react-icons/ci";
+import { useNodes } from "../contexts/useNodes";
 
-function Footer({ handleAddText, handleClear }) {
-  const [fontSize, setFontSize] = useState(20);
-  const [isBold, setBold] = useState(false);
-  const [isItalic, setItalic] = useState(false);
-  const [isUnderline, setUnderline] = useState(false);
-  const [textAlign, setDecoration] = useState(0);
+function Footer({ handleAddText, handleClear, handleChangeProps }) {
+  const {fontSize,
+    isBold,
+    isItalic,
+    textAlign,
+    isUnderline, fontFamily,setFontfamily, 
+    setFontSize,
+    setBold,
+    setItalic,
+    setUnderline,
+    setDecoration} = useNodes();
   const icons = [
     <CiTextAlignCenter size={20} />,
     <CiTextAlignJustify size={20} />,
     <CiTextAlignLeft size={20} />,
     <CiTextAlignRight size={20} />,
   ];
-  const [fontFamily, setFontfamily] = useState("poppins");
   const handleFontfamily = (e) => {
     setFontfamily(e.target.value);
   };
+  useEffect(()=>{
+    handleChangeProps(fontFamily,
+      fontSize,
+      isBold,
+      isItalic,
+      textAlign,
+      isUnderline)
+  }, [fontFamily,
+    fontSize,
+    isBold,
+    isItalic,
+    textAlign,
+    isUnderline])
+
   return (
     <footer
       style={{
@@ -38,6 +57,7 @@ function Footer({ handleAddText, handleClear }) {
         <select
           className="border-1 shadow outline-none px-3 py-2 rounded"
           onChange={handleFontfamily}
+          value={fontFamily}
         >
           <option value="poppins">Poppins</option>
           <option value="Rubik">Rubik</option>
