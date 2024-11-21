@@ -83,26 +83,40 @@ function App() {
       <main className="flex flex-col items-center justify-center h-screen">
         <Header handleRedo={handleRedo} handleUndo={handleUndo} />
         <section
-          className="w-full h-full bg-gray-200 relative"
-          ref={containerRef}
+          className="w-full h-full relative flex"
+          
         >
-          {nodes.map((node) => (
-            <TextBlock
-              key={node.id}
-              text={node.content}
-              left={node.left}
-              top={node.top}
-              fontSize = {node.fontSize}
-              isBold = {node.isBold}
-              isItalic = {node.isItalic}
-              textAlign = {node.textAlign}
-              isUnderline = {node.isUnderline}
-              fontFamily = {node.fontFamily}
-              handleOnchange={handleOnchange}
-              id={node.id}
-            />
-          ))}
+          <main className="bg-gray-200 h-full w-4/5 flex-shrink-0 overflow-hidden relative overflow-x-auto" ref={containerRef}>         
+            {nodes.map((node) => (
+              <TextBlock
+                key={node.id}
+                text={node.content}
+                left={node.left}
+                top={node.top}
+                fontSize = {node.fontSize}
+                isBold = {node.isBold}
+                isItalic = {node.isItalic}
+                textAlign = {node.textAlign}
+                isUnderline = {node.isUnderline}
+                fontFamily = {node.fontFamily}
+                handleOnchange={handleOnchange}
+                id={node.id}
+              />
+            ))}
+          </main>
+          <aside className="h-full w-full bg-slate-100 flex-grow p-5">
+            <h2 className="text-2xl font-bold">Features</h2>
+            <ul className="ml-3 pl-5 mt-5 list-disc">
+              <li>Add text</li>
+              <li>Move text</li>
+              <li>Offline storage ~ local storage</li>
+              <li>Change font,style,size </li>
+              <li>Undo Redo feature </li>
+              <li>Delete Feature</li>
+            </ul>
+          </aside>
         </section>
+
         <Footer
           handleAddText={handleAddText}
           handleChangeProps={handleChangeProps}

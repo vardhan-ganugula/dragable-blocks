@@ -21,6 +21,7 @@ function useUndoRedo() {
   
   const handleClear = () => {
     setNodes([])
+    setRedos([...nodes])
     localStorage.setItem('texts', '')
   }
   return { handleUndo, handleRedo,handleClear };

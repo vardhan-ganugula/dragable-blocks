@@ -14,7 +14,6 @@ export const NodesContext = createContext({
   textAlign: 0,
   isUnderline: false,
   setFontfamily: () => {},
-  setFontfamily: () => {},
   setFontSize: () => {},
   setBold: () => {},
   setItalic: () => {},
