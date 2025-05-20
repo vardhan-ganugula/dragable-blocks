@@ -14,7 +14,7 @@ Dragable Blocks is inspired by OneNote's flexible editing interface, allowing us
 
 1. **Clone the repository:**
     ```bash
-    git clone https://github.com/yourusername/dragable-blocks.git
+    git clone https://github.com/vardhan-ganugula/dragable-blocks.git
     cd dragable-blocks
     ```
 
